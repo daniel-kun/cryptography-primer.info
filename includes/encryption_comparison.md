@@ -1,0 +1,13 @@
+!!! example "Overview of encryption algorithms"
+
+    |Algorithm|Key Sizes|Type|AEAD?|Recommendation|
+    |---------|---------|----|:---:|--------------|
+    |[AES](algorithms/aes.md)|128, 194 or 256 Bits|<p>Symmetric</p>128 Bit Block Cipher|<p>✅</p>via GCM mode|<div class="admonition success"><p class="admonition-title">Recommended</p><p>This algorithm is considered very secure and widely studied and deployed. GCM or CBC modes are recommended.</p>|
+    |ChaCha20|256 Bits|<p>Symmetric</p>Stream Cipher|<p>✅</p>via Poly1305|<div class="admonition success"><p class="admonition-title">Recommended</p><p>This algorithm is considered very secure and widely studied and deployed. Use of Poly1305 is recommended.</p>|
+    |RSA|>= 1028 Bits|<p>Asymmetric</p>Block Cipher|<p>✅</p>built-in|<div class="admonition success"><p class="admonition-title">Recommended</p><p>This algorithm is considered very secure. Usually used with an symmetric encryption algorithm, while RSA "only" encrypts the symmetric key.</p></div>|
+    |Camellia|128, 194 or 256 Bits|<p>Symmetric</p>Block Cipher|❌|<div class="admonition info"><p class="admonition-title">Considered secure</p><p>This algorithm is considered secure, but is not as widely studied or deployed as AES or ChaCha20|
+    |3DES|112 or 168 Bits|<p>Symmetric</p>64 Bit Block Cipher|❌|<div class="admonition info"><p class="admonition-title">Less secure than AES and ChaCha20</p><p>This algorithm is not inherently insecure, but it is less secure than AES or ChaCha20, and computationally more expensive.</p></div>|
+    |DES|56 Bits|<p>Symmetric</p>64 Bit Block Cipher|❌|<div class="admonition failure"><p class="admonition-title">Not recommended</p><p>This algorithm is no longer considered secure</p></div>|
+    |Blowfish|32-448 Bits|Symmetric 64 Bit Block Cipher|❌|<div class="admonition failure"><p class="admonition-title">Not recommended</p><p>This algorithm is no longer considered secure</p></div>|
+    |<p>ARC4</p>(aka "RC4")|40-2048 Bits|Symmetric Stream Cipher|❌|<div class="admonition failure"><p class="admonition-title">Not recommended</p><p>This algorithm is no longer considered secure</p></div>|
+    |IDEA|128 Bits|Symmetric 64 Bit Block Cipher|❌|<div class="admonition failure"><p class="admonition-title">Not recommended</p><p>This algorithm is no longer considered secure</p></div>|

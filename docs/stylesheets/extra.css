@@ -1,0 +1,67 @@
+div.welcome {
+    background-color: #fafafa;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+
+ul.welcome li {
+    list-style: none;
+    padding: 0px;
+}
+
+ul.welcome li:nth-child(1)::before {
+    content: "\1F4D6";
+    margin: 0 1em;
+}
+
+ul.welcome li:nth-child(2)::before {
+    content: "\1F4AD";
+    margin: 0 1em;
+}
+
+
+ul.welcome li:nth-child(3)::before {
+    content: "\1F4A1";
+    margin: 0 1em;
+}
+
+div.glossary-teaser {
+    margin: 60px;
+    align-content: center;
+}
+
+div.glossary-cta {
+    display: flex;
+    justify-content: center;
+}
+
+div.contents {
+    display: grid;
+    grid-template-columns: 32% 32% 32%;
+    justify-content: space-around;
+    align-content: space-around;
+    background-color: #fafafa;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+
+div.contents > div {
+    border: none;
+    background-color: white;
+    border-radius: 4px;
+    margin: 5px;
+    padding: 15px;
+    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+}
+
+div.contents > div:hover {
+    box-shadow: 0px 3px 2px -2px rgb(0 0 0 / 50%), 0px 2px 2px 0px rgb(0 0 0 / 40%), 0px 2px 4px 0px rgb(0 0 0 / 33%);
+}
+
+div.contents > div {
+    cursor: pointer;
+}

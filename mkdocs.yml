@@ -1,0 +1,35 @@
+site_name: Cryptography Primer
+nav:
+- Home: index.md
+- Encryption: encryption.md
+- Hashing: hashing.md
+- Signing: signing.md
+- PKI: pki.md
+- Systems: systems.md
+- History: history.md
+- Glossary: glossary.md
+
+theme:
+  name: material
+  icon:
+    admonition:
+      recommendation: octicons/info-16
+  features:
+    - navigation.tabs
+
+
+markdown_extensions:
+  - admonition
+  - abbr
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true 
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+
+
+extra_css:
+  - stylesheets/extra.css
