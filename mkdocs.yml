@@ -16,6 +16,7 @@ theme:
       recommendation: octicons/info-16
   features:
     - navigation.tabs
+  custom_dir: overrides
 
 
 markdown_extensions:
