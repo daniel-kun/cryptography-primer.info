@@ -18,6 +18,16 @@ theme:
     - navigation.tabs
   custom_dir: overrides
 
+copyright: Copyright &copy; 2022 Daniel Albuschat <a href="imprint">(Imprint)</a>
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/dalbuschat
+    - icon: fontawesome/brands/github
+      link: https://github.com/daniel-kun/cryptography-primer.info/
+    - icon: fontawesome/brands/xing
+      link: https://www.xing.com/profile/Daniel_Albuschat/cv
 
 markdown_extensions:
   - admonition
@@ -29,8 +39,6 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-
-
 
 extra_css:
   - stylesheets/extra.css
