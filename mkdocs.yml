@@ -32,8 +32,11 @@ extra:
 markdown_extensions:
   - admonition
   - abbr
+  - pymdownx.details
   - pymdownx.snippets
   - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.tabbed:
       alternate_style: true 
   - pymdownx.emoji:

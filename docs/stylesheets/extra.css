@@ -65,3 +65,21 @@ div.contents > div:hover {
 div.contents > div {
     cursor: pointer;
 }
+
+ul.recommendations li {
+    list-style-type:none;
+}
+
+ul.recommendations li:before {
+    content: '✅';
+    padding-right: 7px;
+}
+
+ul.discouragements li {
+    list-style-type:none;
+}
+
+ul.discouragements li:before {
+    content: '❌';
+    padding-right: 7px;
+}
