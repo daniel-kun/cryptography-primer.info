@@ -59,6 +59,20 @@ There are modes that add authentication to the encryption output, so that Authen
 |EAX|<i>unknown</i>|<div class="admonition info"><p class="admonition-title">Not widely used</p><p>This mode is not widely used and hence not widely studied, so it is unsure how secure it is. While it is rather easy to implement, it is also slower than other modes.</p></div>|
 |OCB|Offset Codebook Mode|<div class="admonition info"><p class="admonition-title">This mode is patented</p><p>The OCB mode is very, very fast and considered secure. However, it is patented in the U.S. It is free to use in open source software. If you want to use it in a commercial product, you would need to require a <a href="https://www.cs.ucdavis.edu/~rogaway/ocb/license.htm">license or permission to use</a>.</p></div>|
 
+??? info "What is the difference between an IV (initialization vector) and a nonce?"
+
+    Secure modes use either an "IV" (initialization vector) or a nonce. But what is the difference?
+
+    *Initialization Vector*
+
+    The IV needs to be random (generated with a random number generator suitable for cryptography, as you can find in your crypto library).
+    __You must generate a new IV for each encrypted message.__
+
+    *Nonce*
+
+    "Nonce" means "Number only used once". While this is true for an IV, a nonce does not have the requirement to be random. You can safely
+    use a steadily increasing number (a counter) as your nonce - __as long as you don't re-use the same nonce for the same key multiple times__.
+
 ## Modes without Authentication
 
 !!! warning
@@ -149,7 +163,10 @@ Here's a code sample on a simple use case to encrypt and decrypt data:
     import os
     from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
+    # The text to be encrypted:
     plaintext = b"I am secret"
+
+    # Can be None, when no associated data is required:
     authenticated_text= b"authenticated but unencrypted data"
 
     # Generate a random private key for this example:
@@ -171,7 +188,7 @@ Here's a code sample on a simple use case to encrypt and decrypt data:
     ciphertext = aesgcm.encrypt(nonce, plaintext, authenticated_text)
 
     # The content of "ciphertext" can now be shared via an untrusted medium.
-    # The receiver also needs to know the "nonce" and the authenticated text.
+    # The receiver also needs to know the "nonce" and the authenticated text (when used).
 
     # Decrypt the ciphertext back into the plaintext:
     plaintxt = aesgcm.decrypt(nonce, ciphertext, authenticated_text)
