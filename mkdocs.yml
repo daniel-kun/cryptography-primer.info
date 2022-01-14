@@ -18,7 +18,7 @@ theme:
     - navigation.tabs
   custom_dir: overrides
 
-copyright: Copyright &copy; 2022 Daniel Albuschat <a href="imprint">(Imprint)</a>
+copyright: Copyright &copy; 2022 Daniel Albuschat <a href="/imprint/">(Imprint)</a>
 
 extra:
   social:
