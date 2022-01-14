@@ -1,6 +1,6 @@
 site_name: Cryptography Primer
 nav:
-- Home: index.md
+- Home: index2.md
 - Encryption: encryption.md
 - Hashing: hashing.md
 - Signing: signing.md
