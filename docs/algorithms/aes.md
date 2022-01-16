@@ -32,6 +32,10 @@ On this page you will learn:
 
 ## AES in Practice
 
+!!! hint inline end 
+
+    The key sizes 192 and 256 do not change the block size. The block size is always 128 Bits, even when larger keys are being used.
+
 AES comes in multiple forms: AES 128, AES 192, AES 256. The number specifies the size of the private key that is being used. The higher the number, the higher the security (but also the slower the encryption and decryption speed). Even the smallest 128 Bit (16 Bytes) key size is still considered secure, so it is considered safe to use. When your system and environment allows it, you can feel free to use 192 Bit (24 Bytes) or 256 Bit (32 Bytes) to even enhance the security.
 
 ## How to use passwords to encrypt/decrypt with AES
@@ -42,30 +46,11 @@ Instead, a key derivation function is used to create an AES-compatible key from 
 
 ## Modes of operation
 
-!!! hint inline end 
-
-    The key sizes 192 and 256 do not change the block size. The block size is always 128 Bits, even when larger keys are being used.
-
-AES is a block-cipher, which means that it can only encrypt data with the exact block size of 128 Bits (16 Bytes). This means that it must be combined with a so-called "Mode of operation" in order to be able to encrypt arbitrary number of bytes. 
-
-There are modes that add authentication to the encryption output, so that Authenticated Encryption with Associated Data (AEAD) is made possible, and there are modes that do not include authentication. It is recommended to use one of the modes with authentication, because it does not have notable negative performance or memory impacts, but strengthens security.
-
-## Modes with Authentication (AEAD)
-
-|Mode of Operation|Full Name|Description|
-|------|---------|-----------|
-|GCM|Galois/Counter Mode|<div class="admonition success"><p class="admonition-title">This mode is recommended</p><p>The GCM mode uses a random initialization vector (IV) for better security. This means that the same encrypted plaintext does never result in the same ciphertext. The recommended lenght of the initialization vector is [96 Bit](https://csrc.nist.gov/publications/detail/sp/800-38d/final) (12 Bytes).</p></div>|
-|CCM|Counter with CBC-MAC|<div class="admonition info"><p class="admonition-title">Considered secure</p><p>This mode is considered secure and you can safely use it. It is somewhat slower than GCM, though.</p></div>|
-|EAX|<i>unknown</i>|<div class="admonition info"><p class="admonition-title">Not widely used</p><p>This mode is not widely used and hence not widely studied, so it is unsure how secure it is. While it is rather easy to implement, it is also slower than other modes.</p></div>|
-|OCB|Offset Codebook Mode|<div class="admonition info"><p class="admonition-title">This mode is patented</p><p>The OCB mode is very, very fast and considered secure. However, it is patented in the U.S. It is free to use in open source software. If you want to use it in a commercial product, you would need to require a <a href="https://www.cs.ucdavis.edu/~rogaway/ocb/license.htm">license or permission to use</a>.</p></div>|
-
-??? info "What is the difference between an IV (initialization vector) and a nonce?"
-
-    Secure modes use either an "IV" (initialization vector) or a nonce. But what is the difference?
+!!! hint inline end "IV vs. nonce?"
 
     *Initialization Vector*
 
-    The IV needs to be random (generated with a random number generator suitable for cryptography, as you can find in your crypto library).
+    The IV needs to be random (generated with a CSPRNG, as you can find in your crypto library).
     __You must generate a new IV for each encrypted message.__
 
     *Nonce*
@@ -73,19 +58,43 @@ There are modes that add authentication to the encryption output, so that Authen
     "Nonce" means "Number only used once". While this is true for an IV, a nonce does not have the requirement to be random. You can safely
     use a steadily increasing number (a counter) as your nonce - __as long as you don't re-use the same nonce for the same key multiple times__.
 
+AES is a block-cipher, which means that it can only encrypt data with the exact block size of 128 Bits (16 Bytes). This means that it must be combined with a so-called "Mode of operation" in order to be able to encrypt arbitrary number of bytes. 
+
+There are modes that add authentication to the encryption output, so that Authenticated Encryption with Associated Data (AEAD) is made possible, and there are modes that do not include authentication. It is recommended to use one of the modes with authentication, because it does not have notable negative performance or memory impacts, but strengthens security.
+
+!!! info "How to pick a mode of operation"
+
+    You can decide your mode of operation using these few rules of thumb:
+
+    1. If your platform does provide GCM, CCM or EAX modes, use these.
+    1. If your platform provides another authenticated mode, use this one instead.
+    1. If your platform does not provide any authenticated mode, use CTR or CFB instead and then apply [Encrypt-then-MAC](https://crypto.stackexchange.com/questions/202/should-we-mac-then-encrypt-or-encrypt-then-mac). You should also reconsider your platform or library.
+    1. If your platform does not provide CTR or CFB, use anything *except* ECB and then apply [Encrypt-then-MAC](https://crypto.stackexchange.com/questions/202/should-we-mac-then-encrypt-or-encrypt-then-mac). You should also strongly reconsider your platform or library.
+
+## Modes with Authentication (AEAD)
+
+|Mode of Operation|Full Name|Description|
+|------|---------|-----------|
+|GCM|Galois/Counter Mode|<div class="admonition success"><p class="admonition-title">This mode is recommended</p><p>The GCM mode uses a random initialization vector (IV) for better security. This means that the same encrypted plaintext does never result in the same ciphertext. The recommended length of the initialization vector is [96 Bit](https://csrc.nist.gov/publications/detail/sp/800-38d/final) (12 Bytes).</p></div>|
+|CCM|Counter with CBC-MAC|<div class="admonition info"><p class="admonition-title">Considered secure</p><p>This mode is considered secure and you can safely use it. It is somewhat slower than GCM, though.</p></div>|
+|EAX|<i>unknown</i>|<div class="admonition info"><p class="admonition-title">Not widely used</p><p>This mode is not widely used and hence not widely studied, so it is unsure how secure it is. While it is rather easy to implement, it is also slower than other modes.</p></div>|
+|OCB|Offset Codebook Mode|<div class="admonition info"><p class="admonition-title">This mode is patented</p><p>The OCB mode is very, very fast and considered secure. However, it is patented in the U.S. It is free to use in open source software. If you want to use it in a commercial product, you would need to require a <a href="https://www.cs.ucdavis.edu/~rogaway/ocb/license.htm">license or permission to use</a>.</p></div>|
+
 ## Modes without Authentication
 
 !!! warning
 
     You should only use modes without authentication when you have reasons to not use a mode with authentication (listed above).
 
+    Unauthenticated modes are vulnerable to CCA (Chosen Ciphertext Attack), which authenticated modes are not.
+
 |Mode of Operation|Full Name|Description|
 |------|---------|-----------|
-|CBC|Cipher Block Chaining|<div class="admonition info"><p class="admonition-title">Recommended, when GCM can not be used (see above)</p><p>This method improves over ECB as it "mixes" each previous block into the currently encrypted block, which hides patterns and does not encrypt the same block into the same ciphertext. It is always used with an Initialization Vector (IV) in order to even strengthen security and make it possible that even the same plaintext does not yield the same ciphertext.</p></div>|
-|CFB|Cipher Feedback|This mode is pretty similar to CBC, but chains the blocks in a different way. It is also always used with an Initialization Vector.|
-|CTS|Ciphertext Stealing|Ciphertext stealing is a variation of ECB or CBC, but is in practice only used like CBC. The only difference is that the last two blocks are chained differently - up until this the result is the same as CBC.|
-|OFB|Output Feed*b*ack|...|
-|ECB|Electronic Code Book|<div class="admonition failure"><p class="admonition-title">Not recommended<p><p>This method is *not recommended*, because it does not introduce diffusion into the ciphertext, which means that the same block is encrypted to the same ciphertext, effectively leaking patterns, which can easily be used to gain information that should be hidden.</p></div>|
+|CTR|Counter Mode|<div class="admonition failure"><p class="admonition-title">Use this only when you absolutely can't an authenticated mode instead (see above)</p><p>Because this mode does not provide authentication, it is not recommended. However, of all the unauthenticated modes, it is the one with the strongest safety attributes and that is the least easy one to implement incorrectly. Can be parallelized.</p><p><b>You must apply [Encrypt-then-MAC](https://crypto.stackexchange.com/questions/202/should-we-mac-then-encrypt-or-encrypt-then-mac) manually when using an unauthenticated mode</b></p></div>|
+|CFB|Cipher Feedback|<div class="admonition info"><p class="admonition-title">Use CTR - or even better, GCM or CCM - instead</p><p>This mode is pretty similar to CBC, but chains the blocks in a different way. It is also always used with an Initialization Vector, and the IV is required to be produced by a CSPRNG.</p><p><b>You must apply [Encrypt-then-MAC](https://crypto.stackexchange.com/questions/202/should-we-mac-then-encrypt-or-encrypt-then-mac) manually when using an unauthenticated mode.</b></p></div>|
+|CTS|Ciphertext Stealing|<div class="admonition failure"><p class="admonition-title">Not recommended</p><p>Ciphertext stealing is a variation of ECB or CBC, but is in practice only used like CBC. The difference is that the last two blocks are chained differently. The security is not notably different from CBC.</p></div>|
+|CBC|Cipher Block Chaining|<div class="admonition failure"><p class="admonition-title">Not recommended</p><p>This mode requires padding, which makes it vulnerable to padding oracle attacks.</p></div>|
+|ECB|Electronic Code Book|<div class="admonition failure"><p class="admonition-title">Do not ever use this<p><p>This method is *not recommended*, because it does not introduce diffusion into the ciphertext, which means that the same block is encrypted to the same ciphertext, effectively leaking patterns, which can easily be used to gain information that should be hidden.</p></div>|
 
 ## Security Recommendations
 
