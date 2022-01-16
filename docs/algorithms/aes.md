@@ -133,7 +133,32 @@ This code sample show how to securely derive an encryption key from a password:
         Install it with `pip install cryptography` or your favorite package manager.
 
     ``` py
-    # TODO
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
+    # Salts should be randomly generated and need to be accessible
+    # whenever a key is derived from a password. So basically,
+    # the salt is usually stored/transmitted alongside the encrypted data.
+
+    salt = bytes.fromhex('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') # EXAMPLE VALUE - DO NOT USE THIS!
+
+    # derive
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32, # 32 Bytes = 256 Bits
+        salt=salt,
+        iterations=100000, # This should be the minimum. You can increase the iterations if your system can handle it
+                           # to strengthen security.
+    )
+    key = kdf.derive(b"my great password")
+    print(key.hex())
+
+    # `key` can now be used with AES-256.
+
+    # When you use different key sizes (AES-128 or AES-192), you need to specify
+    # the corresponding length. 128 Bits = 16 Bytes, 192 Bits = 24 Bytes.
+    
+    # Further processing can be done to use with AES-256-GCM (explanation and code samples coming soon...)
     ```
 
 === "Java"
@@ -184,7 +209,7 @@ Here's a code sample on a simple use case to encrypt and decrypt data:
     # This ensures that the same plaintext is not encrypted to the same ciphertext.
     # This strengthens security:
     nonce = os.urandom(12)
-    # Notice: NEVER use the same nonce with the same key.
+    # Notice: NEVER re-use the same nonce with the same key.
 
     # Encrypt the data and add the authenticated (but not encrypted) data:
     ciphertext = aesgcm.encrypt(nonce, plaintext, authenticated_text)
