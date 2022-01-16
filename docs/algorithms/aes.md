@@ -67,8 +67,8 @@ There are modes that add authentication to the encryption output, so that Authen
     You can decide your mode of operation using these few rules of thumb:
 
     1. If your platform does provide GCM, CCM or EAX modes, use these.
-    1. If your platform provides another authenticated mode, use this one instead.
-    1. If your platform does not provide any authenticated mode, use CTR or CFB instead and then apply [Encrypt-then-MAC](https://crypto.stackexchange.com/questions/202/should-we-mac-then-encrypt-or-encrypt-then-mac). You should also reconsider your platform or library.
+    1. If your platform provides does not provide these, but another authenticated mode, use this authenticated mode.
+    1. If your platform does not provide any authenticated modes, use CTR or CFB and then apply [Encrypt-then-MAC](https://crypto.stackexchange.com/questions/202/should-we-mac-then-encrypt-or-encrypt-then-mac). You should also reconsider your platform or library.
     1. If your platform does not provide CTR or CFB, use anything *except* ECB and then apply [Encrypt-then-MAC](https://crypto.stackexchange.com/questions/202/should-we-mac-then-encrypt-or-encrypt-then-mac). You should also strongly reconsider your platform or library.
 
 ## Modes with Authentication (AEAD)
