@@ -101,15 +101,17 @@ There are modes that add authentication to the encryption output, so that Authen
 <td>
 <ul class="recommendations">
     <li>Use the largest key size that your system can handle. You can still feel secure when using 128 Bits, though, but more is better.</li>
-    <li>Use a mode that supports AEAD: GCM is recommended (see above).</li>
+    <li>Use a mode that supports authentication (AEAD): GCM is recommended (see above).</li>
     <li>Use a key derivation function such as <a href="algorithms/pbkdf2.md">PBKDF2</a> to convert a password into an AES-compatible key.</li>
     <li>When you need asymmetric encryption (e.g. sender and receiver can not share a password and can not use a key exchange algorithm), use AES together with RSA and encrypt the AES-key using the RSA public key.<b>TODO: Create a page with detailed instructions</b></li>
 </ul>
 </td>
 <td>
 <ul class="discouragements">
-    <li>Don't use the same `none` or `initializatoin vector` multiple times with the same key.</li>
-    <li>Don't transmit the key between two parties. Use either a key exchange algorithm (such as DH or ECDH) or an asymmetric encryption algorithm (such as RSA) for this.</li>
+    <li>Don't use the same `nonce` or `initializatoin vector` multiple times with the same key.</li>
+    <li>Don't use a mode without authentication. <a href="https://tonyarcieri.com/all-the-crypto-code-youve-ever-written-is-probably-broken">(detailed explanation on Tony Arcieri's blog)</a></li>
+    <li>Don't trust your crypto library's defaults - check that you are not accidentally use a discouraged practice, because your library has bad defaults.</li>
+    <li>Don't transmit the key between two parties. Either pre-share the key over a secure medium, use a key exchange algorithm (such as DH or ECDH) or an asymmetric encryption algorithm (such as RSA) for this.</li>
 </ul>
 </td>
         </tr>
