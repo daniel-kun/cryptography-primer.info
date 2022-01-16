@@ -7,7 +7,7 @@ hide:
 
 !!! success "This algorithm is recommended"
 
-    AES is considered __secure__. Use AES with 128, 194 or 256 (pick the largest size feasible for your system) with GCM mode of operation.
+    AES is considered __secure__. Use AES with 128, 192 or 256 (pick the largest size feasible for your system) with GCM mode of operation.
     GCM provides authentication, which makes this an AEAD cipher.
 
 On this page you will learn:
@@ -26,17 +26,17 @@ On this page you will learn:
     |Attributes|Symmetric (Private Key), Block Cipher|
     |Features|Encryption, AEAD|
     |Block Size|128 Bits (16 Bytes)|
-    |Private Key Sizes|128, 194, 256|
+    |Private Key Sizes|128, 192, 256|
     |First Published|1998|
     |Broken by|✅ *Not broken, yet*|
 
 ## AES in Practice
 
-AES comes in multiple forms: AES 128, AES 194, AES 256. The number specifies the size of the private key that is being used. The higher the number, the higher the security (but also the slower the encryption and decryption speed). Even the smallest 128 Bit (16 Bytes) key size is still considered secure, so it is considered safe to use. When your system and environment allows it, you can feel free to use 194 Bit (~24 Bytes) or 256 Bit (32 Bytes) to even enhance the security.
+AES comes in multiple forms: AES 128, AES 192, AES 256. The number specifies the size of the private key that is being used. The higher the number, the higher the security (but also the slower the encryption and decryption speed). Even the smallest 128 Bit (16 Bytes) key size is still considered secure, so it is considered safe to use. When your system and environment allows it, you can feel free to use 192 Bit (24 Bytes) or 256 Bit (32 Bytes) to even enhance the security.
 
 ## How to use passwords to encrypt/decrypt with AES
 
-Usually you use AES in a manner that the key is derived from the password that a user has to enter to encrypt/decrypt the data. Because the key is of fixed length (either 128, 194 or 256 Bits/16, ~24 or 32 Bytes, respectively), you can not use the password as the key directly, because that would impose insecure and inpractical constraints on the password that the user has to choose.
+Usually you use AES in a manner that the key is derived from the password that a user has to enter to encrypt/decrypt the data. Because the key is of fixed length (either 128, 192 or 256 Bits - which are 16, 24 or 32 Bytes, respectively), you can not use the password as the key directly, because that would impose insecure and inpractical constraints on the password that the user has to choose.
 
 Instead, a key derivation function is used to create an AES-compatible key from a password. [PBKDF2](algorithms/pbkdf2.md) (Password Based Key Derivation Function 2) is a state of the art key derivation function.
 
@@ -44,7 +44,7 @@ Instead, a key derivation function is used to create an AES-compatible key from 
 
 !!! hint inline end 
 
-    The key sizes 194 and 256 do not change the block size. The block size is always 128 Bits, even when larger keys are being used.
+    The key sizes 192 and 256 do not change the block size. The block size is always 128 Bits, even when larger keys are being used.
 
 AES is a block-cipher, which means that it can only encrypt data with the exact block size of 128 Bits (16 Bytes). This means that it must be combined with a so-called "Mode of operation" in order to be able to encrypt arbitrary number of bytes. 
 
