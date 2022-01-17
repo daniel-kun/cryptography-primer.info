@@ -30,6 +30,7 @@ extra:
       link: https://www.xing.com/profile/Daniel_Albuschat/cv
 
 markdown_extensions:
+  - footnotes
   - admonition
   - abbr
   - pymdownx.details
