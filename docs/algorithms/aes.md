@@ -253,6 +253,30 @@ Here's a code sample on a simple use case to encrypt and decrypt data:
     // TODO
     ```
 
+## Security Level
+
+??? info ""Security Level" explained"
+
+    In cryptography, anything that lets you decrypt a message or extract the secret key with less effort than "brute force" is considered a "break" or a possible "attack". "Brute force" means testing out the key in the whole key space - for AES-128 this means trying all 340,282,366,920,938,463,463,374,607,431,768,211,456 possible values that an 128 Bit (16 Bytes) value can have. For AES-256, these are 115,792,089,237,316,195,423,570,985,008,687,907,853,269,984,665,640,564,039,457,584,007,913,129,639,936 possible values.
+
+    As you can imagine, not every "attack" is a real problem. Having an attacker have to try out for example 2<sup>127</sup> values (instead of 2<sup>128</sup>) is not a risk in practice.
+
+    With the help of certain "attacks" it is possible to reduce the key space required to try out in order to break the encryption. The lowest key space that you can attain for a given cipher using one or a combination of attacks is considered the <b>"security level"</b>.
+
+    In cryptography, a key space of 2<sup>80</sup> (this is a security level of 80 Bits) has long been considered secure. This might no longer be the case, depending on how strong your security needs to be. The BSI (German Institute of Cybersecurity) recommends a security level of at least 100 Bits and even 120 Bits for high security[^10] in 2022.
+
+    The security level of a cipher is not fix in time. It might become lower if attacks on the cipher have been found. That is why security recommendations are valid usually not more than one or two years into the future.
+
+In 2022, AES is considered to have the following security levels:
+
+|Key Size|Security Level|Considered Secure?|
+|------------|--------------|:----------------:|
+|AES-128|126.1 Bits| :fontawesome-solid-check-circle: |
+|AES-192|189.7 Bits| :fontawesome-solid-check-circle: |
+|AES-256|254.4 Bits| :fontawesome-solid-check-circle: |
+
+The security level is lower than the raw key size, because there is an attack method that allows to lower the key space that is required to be searched in order to break an encryption. This attack is called the "Biclique attack"[^11].
+
 ## Alternatives
 
 Other Symmetric Encryption algorithms are:
@@ -278,5 +302,8 @@ Other Symmetric Encryption algorithms are:
 [^6]: [Should we MAC-then-encrypt or encrypt-then-MAC?](https://crypto.stackexchange.com/questions/202/should-we-mac-then-encrypt-or-encrypt-then-mac)
 [^7]: [Free Licenses](https://www.cs.ucdavis.edu/~rogaway/ocb/license.htm) on www.cs.ucdavis.edu by Phillip Rogaway
 [^8]: ["Electronic codebook (ECB)" at "Block cipher mode of operation"](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_(ECB)) on Wikipedia
+[^10]: [BSI - Technical Guide - Cryptographic Mechanisms:
+Recommendations and Key Lengths](https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-1.pdf?__blob=publicationFile) on bsi.bund.de
+[^11]: [Biclique attack](https://en.wikipedia.org/wiki/Biclique_attack) on Wikipedia
 
 --8<-- "includes/abbrevations.md"
