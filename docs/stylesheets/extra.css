@@ -47,8 +47,24 @@ div.glossary-cta {
 }
 
 div.contents {
-    display: grid;
+    grid-template-columns: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+div.contents {
+    grid-template-columns: 50% 50%;
+}
+}
+
+@media only screen and (min-width: 900px) {
+div.contents {
     grid-template-columns: 32% 32% 32%;
+}
+}
+
+
+div.contents {
+    display: grid;
     justify-content: space-around;
     align-content: space-around;
     background-color: #fafafa;
