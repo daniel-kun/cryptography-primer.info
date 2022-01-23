@@ -11,6 +11,8 @@ nav:
 
 theme:
   name: material
+  favicon: images/favicon.svg
+  logo: images/favicon.svg
   icon:
     admonition:
       recommendation: octicons/info-16
