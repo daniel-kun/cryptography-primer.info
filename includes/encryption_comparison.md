@@ -1,6 +1,6 @@
 !!! example "Overview of encryption algorithms"
 
-    |Algorithm|Key Sizes|Type|Authentication?<br/>(AEAD)|Recommendation|
+    |Algorithm|Key Sizes|Type|Authentication?<br/>(AE or AEAD)|Recommendation|
     |---------|---------|----|:---:|--------------|
     |[AES](/algorithms/aes)|128, 192 or 256 Bits|<p>Symmetric</p>128 Bit Block Cipher|<p>✅</p>via GCM mode|<div class="admonition success"><p class="admonition-title">Recommended</p><p>This algorithm is considered very secure and widely studied and deployed. GCM or CBC modes are recommended.</p>|
     |ChaCha20|256 Bits|<p>Symmetric</p>Stream Cipher|<p>✅</p>via Poly1305|<div class="admonition success"><p class="admonition-title">Recommended</p><p>This algorithm is considered very secure and widely studied and deployed. Use of Poly1305 is recommended.</p>|
