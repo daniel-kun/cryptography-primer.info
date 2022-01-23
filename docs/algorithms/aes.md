@@ -28,7 +28,6 @@ On this page you will learn:
     |Block Size|128 Bits (16 Bytes)|
     |Private Key Sizes|128, 192, 256|
     |First Published|1998|
-    |Broken by|✅ *Not broken, yet*|
 
 ## AES in Practice
 

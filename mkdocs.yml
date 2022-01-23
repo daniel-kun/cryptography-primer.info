@@ -1,13 +1,13 @@
 site_name: Cryptography Primer
 nav:
-- Home: index2.md
+- Home: index.md
 - Encryption: encryption.md
-- Hashing: hashing.md
-- Signing: signing.md
-- PKI: pki.md
-- Systems: systems.md
-- History: history.md
-- Glossary: glossary.md
+# - Hashing: hashing.md
+# - Signing: signing.md
+# - PKI: pki.md
+# - Systems: systems.md
+# - History: history.md
+# - Glossary: glossary.md
 
 theme:
   name: material
