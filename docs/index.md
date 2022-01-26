@@ -34,6 +34,14 @@ hide:
         </p>
         <a>Learn more</a>
     </div>
+
+    <div onclick="window.location='/hash_sign_mac/'">
+        <b>Hashing, Signing and MAC</b>
+        <p>
+        What are hashing, signing and MAC (Message Authentication Code) used for and what is the difference between these?
+        </p>
+        <a>Learn more</a>
+    </div>
   </div>
 
 
@@ -77,3 +85,5 @@ hide:
     - History
         - The history of cryptography from ancient until today
         - A glimpse in the future: Quantum Computer and cryptography
+
+--8<-- "includes/abbrevations.md"
