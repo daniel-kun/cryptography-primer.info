@@ -1,3 +1,9 @@
-!!! warning "Overview of signing algorithms"
+|Name|Description|
+|----|-----------|
+|EdDSA|<div class="admonition success"><p class="admonition-title">Recommended</p><p>This algorithm is a variant of DSA, but uses "twisted Edwards curves", which have a few advantages[^100]:</p><p><ul><li>High performance on a wide range of systems</li><li>More resilient to side-channel attacks</li><li>Does not require a unique random number for each messsage</li></ul></p></div>|
+|ECDSA|<div class="admonition success"><p class="admonition-title">Recommended</p><p>This algorithm is a variant of DSA, but uses elliptic curves instead of modular arithmetic. This decreases the required key size for the same safety level drastically. Additionally, the same Public/Private Key pair could be used for encryption using ECIES, which could be an advantage.</p></div>|
+|RSA|<div class="admonition success"><p class="admonition-title">Recommended</p><p>RSA can be used for digital signatures and asymmetric encryption using the same Public/Private key pair. Compared to ECDSA and EdDSA it has much larger key sizes and is computationally more expensive. However, if your system can profit from using the same Private/Public key pair for signing and encrypting, and the somewhat rarely used ECIES is not a feasible option for you, RSA can be a good fit.</p></div>|
+|DSA|<div class="admonition info"><p class="admonition-title">Use EdDSA, ECDSA or RSA instead (preference in this order)</p><p>DSA was the first standardised digital signature algorithm and is still considered secure. However, the large key size and expensive computations makes it less pratical than it's modern successors such as ECDSA and EdDSA.</p></div>|
 
-    Coming soon...
+
+[^100]: [What is the difference between ECDSA and EdDSA?](https://crypto.stackexchange.com/questions/60383/what-is-the-difference-between-ecdsa-and-eddsa) on crypto.stackexchange.com
