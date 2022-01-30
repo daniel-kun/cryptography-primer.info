@@ -9,7 +9,7 @@ Hashes, MACs and digital signatures are primitives of cryptography, where hashes
 
 Hashes, MACs and digital signatures have a few things in common:
 
-- They can be used to validate the "integrity" of a message - this means that you can be sure that the message is the same as the one providing you the hash, signature or MAC wanted to give you.
+- They can be used to validate the "integrity" of a message - this means that you can be sure that the message was not corrupted if it matches the hash, signature or MAC that you compare it with.
 - The original message can not be extracted from them
 - Hence, they __don't__ encrypt messages and are not encryption algorithms
 
@@ -26,7 +26,7 @@ Here is a table showing the differences of the possibilities for each primitive:
 
 A hash basically "reduces" an arbitrary large message into a fixed size digest in a non-reversible way. In particular, a hash function aims to do this in a way that possible _collisions_ are as unlikely as possible. Nowadays, when you say "hash function", you usually mean cryptographic hash functions. There are non-cryptographic hash functions[^1], too (but some even refuse to call those hash functions): Most notably CRC[^2] (cyclic redundancy check), which is often used to verify that data has not been (unintentionally) corrupted during transport.
 
-But even cryptographic hash functions can be used for non-cryptographic and also cryptographic use cases:
+But even cryptographic hash functions can be used for non-cryptographic as well as cryptographic use cases:
 
 ### Non-Cryptographic use-cases for hash functions
 
