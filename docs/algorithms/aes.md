@@ -37,6 +37,24 @@ On this page you will learn:
 
 AES comes in multiple forms: AES-128, AES-192, AES-256. The number specifies the size of the private key that is being used. The higher the number, the higher the security (but also the slower the encryption and decryption speed). Even the smallest 128 Bit (16 Bytes) key size is currently considered secure[^1] and safe to use mid-term. With AES-256 you can even achieve quantum resistance from the current state of research (Januar 2022)[^2][^9].
 
+## AES Key Generation
+
+Private keys for AES do not have to follow a specific form - they just need to be (crypto-secure) random bits of the required size. Other algorithms, such as RSA or EC, require the values to conform to some mathematical requirements, but AES keys do not.
+
+However, it is important to make sure that the key is generated properly, because otherwise the key generation can be an attack vector - and maybe even a very easy one to attack, if key generation is not "random enough".
+
+Here are a few recommendations that you should keep in mind when implementing AES key generation:
+
+<ul class="recommendations">
+    <li>Use a CSPRNG<sup><a id="fnref:15" href="#fn:15">15</a></sup> or HSM<sup><a id="fnref:14" href="#fn:14">14</a></sup> if possible
+    <li>Otherwise make sure that you seed your random number generator properly</li>
+    <li>Always seed a key generator with new randomness - don't succinctly generate multiples keys from the same random number seed</li>
+    <li>Generate keys where they will be ultimately needed and stored - e.g. don't generate keys server-side to use them on the client, but generate them client-side instead.</li>
+    <li>Store private keys securely</li>
+    <li>Avoid transferring private keys</li>
+    <li>It is highly recommended to re-negotiate or rotate keys as often as possible. Don't see an AES key as something "permanently" bound to a person or a node, but instead make it something ephemeral that can change on a frequent basis.</li>
+</ul>
+
 ## How to use passwords to encrypt/decrypt with AES
 
 Usually you use AES in a manner that the key is derived from the password that a user has to enter to encrypt/decrypt the data. Because the key is of fixed length (either 128, 192 or 256 Bits - which are 16, 24 or 32 Bytes, respectively), you can not use the password as the key directly, because that would impose insecure and inpractical constraints on the password that the user has to choose.
@@ -141,6 +159,43 @@ There are modes that add authentication to the encryption, and there are modes t
 </table>
 
 ## Code Samples
+
+### AES key generation
+
+This code sample shows how to securely generate a new AES key:
+
+!!! warning 
+
+    Do not use your regular "random" function for AES key generation,
+    but use your crypto library's dedicated functions for this.
+
+=== "Python"
+
+    !!! info
+
+        This code sample requires the widely used [`pyca/cryptography`](https://pypi.org/project/cryptography/) package.
+
+        Install it with `pip install cryptography` or your favorite package manager.
+
+    ``` py
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    # Generate a random 256 Bit private key:
+    key = AESGCM.generate_key(bit_length=256)
+    ```
+
+=== "Java"
+
+    ``` java
+    // TODO
+    ```
+
+=== "JavaScript"
+
+    ``` javascript
+    // TODO
+    ```
+
 
 ### Key derivation from passwords
 
@@ -313,5 +368,7 @@ Recommendations and Key Lengths](https://www.bsi.bund.de/SharedDocs/Downloads/EN
 [^11]: [Biclique attack](https://en.wikipedia.org/wiki/Biclique_attack) on Wikipedia
 [^12]: [Padding oracle attack](https://en.wikipedia.org/wiki/Padding_oracle_attack) on Wikipedia
 [^13]: [Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode (GCM) and GMAC](https://csrc.nist.gov/publications/detail/sp/800-38d/final) on csrc.nist.gov
+[^14]: [Hardware Security Module](https://en.wikipedia.org/wiki/Hardware_security_module) on Wikipedia
+[^15]: [Cryptographically-secure pseudorandom number generator](https://en.wikipedia.org/wiki/Cryptographically-secure_pseudorandom_number_generator) on Wikipedia
 
 --8<-- "includes/abbrevations.md"
