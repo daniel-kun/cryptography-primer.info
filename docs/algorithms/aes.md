@@ -41,25 +41,11 @@ AES comes in multiple forms: AES-128, AES-192, AES-256. The number specifies the
 
 Private keys for AES do not have to follow a specific form - they just need to be (crypto-secure) random bits of the required size. Other algorithms, such as RSA or EC, require the values to conform to some mathematical requirements, but AES keys do not.
 
-However, it is important to make sure that the key is generated properly, because otherwise the key generation can be an attack vector - and maybe even a very easy one to attack, if key generation is not "random enough".
-
-Here are a few recommendations that you should keep in mind when implementing AES key generation:
-
-<ul class="recommendations">
-    <li>Use a CSPRNG<sup><a id="fnref:15" href="#fn:15">15</a></sup> or HSM<sup><a id="fnref:14" href="#fn:14">14</a></sup> if possible
-    <li>Otherwise make sure that you seed your random number generator properly</li>
-    <li>Always seed a key generator with new randomness - don't succinctly generate multiples keys from the same random number seed</li>
-    <li>Generate keys where they will be ultimately needed and stored - e.g. don't generate keys server-side to use them on the client, but generate them client-side instead.</li>
-    <li>Store private keys securely</li>
-    <li>Avoid transferring private keys</li>
-    <li>It is highly recommended to re-negotiate or rotate keys as often as possible. Don't see an AES key as something "permanently" bound to a person or a node, but instead make it something ephemeral that can change on a frequent basis.</li>
-</ul>
+{{ key_generation_snippet('AES') }}
 
 ## How to use passwords to encrypt/decrypt with AES
 
-Usually you use AES in a manner that the key is derived from the password that a user has to enter to encrypt/decrypt the data. Because the key is of fixed length (either 128, 192 or 256 Bits - which are 16, 24 or 32 Bytes, respectively), you can not use the password as the key directly, because that would impose insecure and inpractical constraints on the password that the user has to choose.
-
-Instead, a key derivation function is used to create an AES-compatible key from a password. [PBKDF2](algorithms/pbkdf2.md) (Password Based Key Derivation Function 2) is a state of the art key derivation function.
+{{ password_keygen_snippet('AES', 'either 128, 192 or 256 Bits - which are 16, 24 or 32 Bytes, respectively') }}
 
 See the [code sample below](/algorithms/aes/#key-derivation-from-passwords).
 
