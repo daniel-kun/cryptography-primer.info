@@ -7,11 +7,11 @@ hide:
 
 !!! success "This algorithm is recommended"
 
-    Use ChaCha in it's XChaCha20-Poly1305 variation.
+    Use ChaCha in it's XChaCha20-Poly1305 or ChaCha20-Poly1305 variations.
 
-    XChaCha20-Poly1305 is considered __secure__[^1] and fast. It has a strong security level and provides authentication.
+    XChaCha20-Poly1305 and ChaCha20-Poly1305 are considered __secure__[^1] and fast. It has a strong security level and provides authentication (AEAD).
 
-    It is arguably easier to use than [AES](/algorithms/aes/), because it has less (insecure) variations. However, when using AES as AES-256-GCM, the differences in security to ChaCha20-Poly1305 are negligible. Note that AES is only fast to use then hardware acceleration is available - while this is very common nowadays, it might be a constraint to consider. ChaCha can be implemented very fast in software only and does not require special CPU instructions.
+    It is arguably easier to use than [AES](/algorithms/aes/), because it has less (insecure) variations and modes of operation. However, when using AES as AES-256-GCM, the differences in security to ChaCha20-Poly1305 are negligible. Note that AES is only fast to use when hardware acceleration is available - while this is very common nowadays, it might be a constraint to consider. ChaCha can be implemented very fast in software only and does not require special CPU instructions.
 
 On this page you will learn:
 

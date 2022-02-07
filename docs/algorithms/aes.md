@@ -10,6 +10,9 @@ hide:
     AES is considered __secure__[^1]. Use AES with 128, 192 or 256 (pick the largest size feasible for your system) with GCM mode of operation.
     GCM provides authentication, which makes this an AEAD cipher.
 
+    A very good and fast alternative is [ChaCha](/algorithms/chacha/), which comes in less variations and there are fewer things
+    that can be done wrong when implementing it. Also, ChaCha might be faster on certain hardware that does not provide AES hardware-acceleration (which most common chipsets, even embedded ones, provide).
+
 On this page you will learn:
 
 * What is AES, and features does it provide?
