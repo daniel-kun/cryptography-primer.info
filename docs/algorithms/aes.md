@@ -16,7 +16,6 @@ On this page you will learn:
 * How secure is AES?
 * What can I use instead of AES?
 * What modes of operation can I use with AES?
-* Where and how is AES being used?
 
 !!! info "Quick Info"
 
@@ -152,7 +151,7 @@ This code sample shows how to securely generate a new AES key:
 
 !!! warning 
 
-    Do not use your regular "random" function for AES key generation,
+    Do not use your regular "random" function for key generation,
     but use your crypto library's dedicated functions for this.
 
 === "Python"
@@ -168,6 +167,7 @@ This code sample shows how to securely generate a new AES key:
 
     # Generate a random 256 Bit private key:
     key = AESGCM.generate_key(bit_length=256)
+    print(key.hex())
     ```
 
 === "Java"
@@ -189,32 +189,7 @@ This code sample show how to securely derive an encryption key from a password:
 
 === "Python"
 
-    !!! info
-
-        This code sample requires the widely used [`pyca/cryptography`](https://pypi.org/project/cryptography/) package.
-
-        Install it with `pip install cryptography` or your favorite package manager.
-
-    ``` py
-    from cryptography.hazmat.primitives import hashes
-    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-
-    # Salts should be randomly generated and need to be accessible
-    # whenever a key is derived from a password. So basically,
-    # the salt is usually stored/transmitted alongside the encrypted data.
-
-    salt = bytes.fromhex('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') # EXAMPLE VALUE - DO NOT USE THIS!
-
-    # derive
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32, # 32 Bytes = 256 Bits
-        salt=salt,
-        iterations=100000, # This should be the minimum. You can increase the iterations if your system can handle it
-                           # to strengthen security.
-    )
-    key = kdf.derive(b"my great password")
-    print(key.hex())
+--8<-- "includes/password_keygen_code_snippet_python.md"
 
     # `key` can now be used with AES-256.
 
@@ -269,16 +244,20 @@ Here's a code sample on a simple use case to encrypt and decrypt data:
     aesgcm = AESGCM(key)
 
     # Generate a "nonce" for this encryption session of size 96 Bits (12 Bytes).
-    # This ensures that the same plaintext is not encrypted to the same ciphertext.
-    # This strengthens security:
+    # A nonce ensures that the same plaintext is not encrypted to the same ciphertext, which strenghtens security:
+
     nonce = os.urandom(12)
-    # Notice: NEVER re-use the same nonce with the same key.
+    # Notice: NEVER re-use the same nonce with the same key. Using a counter - if feasible - is an appropriate
+    # way to prevent this. Using a random number might have a realistic chance of reuse,
+    # depending on the number of messages that are being encrypted, the implementation of the random number generator
+    # and the available entropy in the system.
 
     # Encrypt the data and add the authenticated (but not encrypted) data:
     ciphertext = aesgcm.encrypt(nonce, plaintext, authenticated_text)
 
     # The content of "ciphertext" can now be shared via an untrusted medium.
-    # The receiver also needs to know the "nonce" and the authenticated text (when used).
+    # The receiver also needs to know the "nonce" and the authenticated text (when used),
+    # which can also be shared via an untrusted medium.
 
     # Decrypt the ciphertext back into the plaintext:
     plaintxt = aesgcm.decrypt(nonce, ciphertext, authenticated_text)
@@ -306,7 +285,9 @@ Here's a code sample on a simple use case to encrypt and decrypt data:
 
 In 2022, AES is considered to have the following security levels:
 
-|Key Size|Security Level|Considered Secure?|
+--8<-- "includes/broken.md"
+
+|Variation|Security Level|Considered Secure?|
 |------------|--------------|:----------------:|
 |AES-128|126.1 Bits| :fontawesome-solid-check-circle: |
 |AES-192|189.7 Bits| :fontawesome-solid-check-circle: |

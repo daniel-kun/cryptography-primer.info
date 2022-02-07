@@ -6,7 +6,7 @@ Here are a few recommendations that you should keep in mind when implementing {{
 
 <ul class="recommendations">
     <li>Use a CSPRNG (Cryptographically-secure Pseudo Random Number Generator) or HSM (Hardware Security Module), if possible
-    <li>Otherwise make sure that you seed your random number generator properly</li>
+    <li>Otherwise make sure that you seed your random number generator properly (<b>don't</b> only use the current timestamp)</li>
     <li>Always seed a key generator with new randomness - don't succinctly generate multiples keys from the same random number seed</li>
     <li>Generate keys where they will be ultimately needed and stored - e.g. don't generate keys server-side to use them on the client, but generate them client-side instead.</li>
     <li>Store private keys securely</li>
