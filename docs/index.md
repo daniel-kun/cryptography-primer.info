@@ -35,6 +35,14 @@ hide:
         <a>Learn more</a>
     </div>
 
+    <div onclick="window.location='/algorithms/chacha/'">
+        <b>ChaCha in detail</b>
+        <p>
+        Learn all about ChaCha and how to apply it securely in your application.
+        </p>
+        <a>Learn more</a>
+    </div>
+
     <div onclick="window.location='/hash_sign_mac/'">
         <b>Hashing, Signing and MAC</b>
         <p>

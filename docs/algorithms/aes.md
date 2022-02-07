@@ -10,13 +10,15 @@ hide:
     AES is considered __secure__[^1]. Use AES with 128, 192 or 256 (pick the largest size feasible for your system) with GCM mode of operation.
     GCM provides authentication, which makes this an AEAD cipher.
 
+    A very good and fast alternative is [ChaCha](/algorithms/chacha/), which comes in less variations and there are fewer things
+    that can be done wrong when implementing it. Also, ChaCha might be faster on certain hardware that does not provide AES hardware-acceleration (which most common chipsets, even embedded ones, provide).
+
 On this page you will learn:
 
 * What is AES, and features does it provide?
 * How secure is AES?
 * What can I use instead of AES?
 * What modes of operation can I use with AES?
-* Where and how is AES being used?
 
 !!! info "Quick Info"
 
@@ -41,25 +43,11 @@ AES comes in multiple forms: AES-128, AES-192, AES-256. The number specifies the
 
 Private keys for AES do not have to follow a specific form - they just need to be (crypto-secure) random bits of the required size. Other algorithms, such as RSA or EC, require the values to conform to some mathematical requirements, but AES keys do not.
 
-However, it is important to make sure that the key is generated properly, because otherwise the key generation can be an attack vector - and maybe even a very easy one to attack, if key generation is not "random enough".
-
-Here are a few recommendations that you should keep in mind when implementing AES key generation:
-
-<ul class="recommendations">
-    <li>Use a CSPRNG<sup><a id="fnref:15" href="#fn:15">15</a></sup> or HSM<sup><a id="fnref:14" href="#fn:14">14</a></sup> if possible
-    <li>Otherwise make sure that you seed your random number generator properly</li>
-    <li>Always seed a key generator with new randomness - don't succinctly generate multiples keys from the same random number seed</li>
-    <li>Generate keys where they will be ultimately needed and stored - e.g. don't generate keys server-side to use them on the client, but generate them client-side instead.</li>
-    <li>Store private keys securely</li>
-    <li>Avoid transferring private keys</li>
-    <li>It is highly recommended to re-negotiate or rotate keys as often as possible. Don't see an AES key as something "permanently" bound to a person or a node, but instead make it something ephemeral that can change on a frequent basis.</li>
-</ul>
+{{ key_generation_snippet('AES') }}
 
 ## How to use passwords to encrypt/decrypt with AES
 
-Usually you use AES in a manner that the key is derived from the password that a user has to enter to encrypt/decrypt the data. Because the key is of fixed length (either 128, 192 or 256 Bits - which are 16, 24 or 32 Bytes, respectively), you can not use the password as the key directly, because that would impose insecure and inpractical constraints on the password that the user has to choose.
-
-Instead, a key derivation function is used to create an AES-compatible key from a password. [PBKDF2](algorithms/pbkdf2.md) (Password Based Key Derivation Function 2) is a state of the art key derivation function.
+{{ password_keygen_snippet('AES', 'either 128, 192 or 256 Bits - which are 16, 24 or 32 Bytes, respectively') }}
 
 See the [code sample below](/algorithms/aes/#key-derivation-from-passwords).
 
@@ -148,7 +136,7 @@ There are modes that add authentication to the encryption, and there are modes t
 </td>
 <td>
 <ul class="discouragements">
-    <li>Don't use the same `nonce` or `initializatoin vector` multiple times with the same key.</li>
+    <li>It is very important that you don't use the same `nonce` or `initialization vectiro` multiple times with the same key.</li>
     <li>Don't use a mode without authentication. <a href="https://tonyarcieri.com/all-the-crypto-code-youve-ever-written-is-probably-broken">(detailed explanation on Tony Arcieri's blog)</a></li>
     <li>Don't trust your crypto library's defaults - check that you are not accidentally use a discouraged practice, because your library has bad defaults.</li>
     <li>Don't transmit the key between two parties. Either pre-share the key over a secure medium, use a key exchange algorithm (such as DH or ECDH) or an asymmetric encryption algorithm (such as RSA) for this.</li>
@@ -166,7 +154,7 @@ This code sample shows how to securely generate a new AES key:
 
 !!! warning 
 
-    Do not use your regular "random" function for AES key generation,
+    Do not use your regular "random" function for key generation,
     but use your crypto library's dedicated functions for this.
 
 === "Python"
@@ -182,6 +170,7 @@ This code sample shows how to securely generate a new AES key:
 
     # Generate a random 256 Bit private key:
     key = AESGCM.generate_key(bit_length=256)
+    print(key.hex())
     ```
 
 === "Java"
@@ -203,32 +192,7 @@ This code sample show how to securely derive an encryption key from a password:
 
 === "Python"
 
-    !!! info
-
-        This code sample requires the widely used [`pyca/cryptography`](https://pypi.org/project/cryptography/) package.
-
-        Install it with `pip install cryptography` or your favorite package manager.
-
-    ``` py
-    from cryptography.hazmat.primitives import hashes
-    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-
-    # Salts should be randomly generated and need to be accessible
-    # whenever a key is derived from a password. So basically,
-    # the salt is usually stored/transmitted alongside the encrypted data.
-
-    salt = bytes.fromhex('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') # EXAMPLE VALUE - DO NOT USE THIS!
-
-    # derive
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32, # 32 Bytes = 256 Bits
-        salt=salt,
-        iterations=100000, # This should be the minimum. You can increase the iterations if your system can handle it
-                           # to strengthen security.
-    )
-    key = kdf.derive(b"my great password")
-    print(key.hex())
+--8<-- "includes/password_keygen_code_snippet_python.md"
 
     # `key` can now be used with AES-256.
 
@@ -283,16 +247,20 @@ Here's a code sample on a simple use case to encrypt and decrypt data:
     aesgcm = AESGCM(key)
 
     # Generate a "nonce" for this encryption session of size 96 Bits (12 Bytes).
-    # This ensures that the same plaintext is not encrypted to the same ciphertext.
-    # This strengthens security:
+    # A nonce ensures that the same plaintext is not encrypted to the same ciphertext, which strenghtens security:
+
     nonce = os.urandom(12)
-    # Notice: NEVER re-use the same nonce with the same key.
+    # Notice: NEVER re-use the same nonce with the same key. Using a counter - if feasible - is an appropriate
+    # way to prevent this. Using a random number might have a realistic chance of reuse,
+    # depending on the number of messages that are being encrypted, the implementation of the random number generator
+    # and the available entropy in the system.
 
     # Encrypt the data and add the authenticated (but not encrypted) data:
     ciphertext = aesgcm.encrypt(nonce, plaintext, authenticated_text)
 
     # The content of "ciphertext" can now be shared via an untrusted medium.
-    # The receiver also needs to know the "nonce" and the authenticated text (when used).
+    # The receiver also needs to know the "nonce" and the authenticated text (when used),
+    # which can also be shared via an untrusted medium.
 
     # Decrypt the ciphertext back into the plaintext:
     plaintxt = aesgcm.decrypt(nonce, ciphertext, authenticated_text)
@@ -316,21 +284,13 @@ Here's a code sample on a simple use case to encrypt and decrypt data:
 
 ## Security Level
 
-??? info ""Security Level" explained"
-
-    In cryptography, anything that lets you decrypt a message or extract the secret key with less effort than "brute force" is considered a "break" or a possible "attack". "Brute force" means testing out the key in the whole key space - for AES-128 this means trying all 340,282,366,920,938,463,463,374,607,431,768,211,456 possible values that an 128 Bit (16 Bytes) value can have. For AES-256, these are 115,792,089,237,316,195,423,570,985,008,687,907,853,269,984,665,640,564,039,457,584,007,913,129,639,936 possible values.
-
-    As you can imagine, not every "attack" is a real problem. Having an attacker have to try out for example 2<sup>127</sup> values (instead of 2<sup>128</sup>) is not a risk in practice.
-
-    With the help of certain "attacks" it is possible to reduce the key space required to try out in order to break the encryption. The lowest key space that you can attain for a given cipher using one or a combination of attacks is considered the <b>"security level"</b>.
-
-    In cryptography, a key space of 2<sup>80</sup> (this is a security level of 80 Bits) has long been considered secure. This might no longer be the case, depending on how strong your security needs to be. The BSI (German Institute of Cybersecurity) recommends a security level of at least 100 Bits and even 120 Bits for high security[^10] in 2022.
-
-    The security level of a cipher is not fix in time. It might become lower if attacks on the cipher have been found. That is why security recommendations are valid usually not more than one or two years into the future.
+--8<-- "includes/security_level_explained.md"
 
 In 2022, AES is considered to have the following security levels:
 
-|Key Size|Security Level|Considered Secure?|
+--8<-- "includes/broken.md"
+
+|Variation|Security Level|Considered Secure?|
 |------------|--------------|:----------------:|
 |AES-128|126.1 Bits| :fontawesome-solid-check-circle: |
 |AES-192|189.7 Bits| :fontawesome-solid-check-circle: |
