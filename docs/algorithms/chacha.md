@@ -29,6 +29,7 @@ On this page you will learn:
     |Features|Encryption, AEAD|
     |Private Key Size|256 Bits (32 Bytes)|
     |First Published|2008|
+    |Designers|D. J. Bernstein|
 
 ## ChaCha in Practice
 
