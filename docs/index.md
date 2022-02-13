@@ -14,7 +14,9 @@ hide:
 
     The author is actively working on fine-tuning existing content and adding new content every day.
 
-    Follow :fontawesome-brands-twitter: [CryptPrimer](https://twitter.com/CryptPrimer) on Twitter to stay up to date and learn about new content. I'd also love to hear your opinion and feedback!
+    Follow :fontawesome-brands-twitter: [@CryptPrimer](https://twitter.com/CryptPrimer) on Twitter to stay up to date and learn about new content. I'd also love to hear your opinion and feedback!
+
+--8<-- "includes/disclaimer.md"
 
 # Content
 
@@ -60,22 +62,23 @@ hide:
     The following topics are planned to be added in the future:
 
     - Encryption algorithms:
-        - ChaCha20 and Poly1305
-        - RSA
         - ECIES
+        - RSA
         - Practical attacks on encryption algorithms and how to prevent them
     - Key derivation:
         - Overview and comparison
         - Password-based key derivation
         - Key derivation for other scenarios
     - Hashing functions:
-        - Overview and comparison
         - SHA2 family
         - SHA3 familiy
+        - Blake2
+        - Blake3
         - Practical collisions for hashing functions and their impact
-    - Digital Signaturess:
-        - Overview and Comparison
-        - ...
+    - Digital Signatures:
+        - EdDSA
+        - ECDSA
+        - RSA
     - Message Authentication Codes
         - Overview and Comparison
         - ...

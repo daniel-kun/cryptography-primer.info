@@ -13,6 +13,8 @@ hide:
 
     It is arguably easier to use than [AES](/algorithms/aes/), because it has less (insecure) variations and modes of operation. However, when using AES as AES-256-GCM, the differences in security to ChaCha20-Poly1305 are negligible. Note that AES is only fast to use when hardware acceleration is available - while this is very common nowadays, it might be a constraint to consider. ChaCha can be implemented very fast in software only and does not require special CPU instructions.
 
+--8<-- "includes/disclaimer.md"
+
 On this page you will learn:
 
 * What is ChaCha, and features does it provide?
