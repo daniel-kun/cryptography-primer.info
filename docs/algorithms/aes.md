@@ -13,6 +13,8 @@ hide:
     A very good and fast alternative is [ChaCha](/algorithms/chacha/), which comes in less variations and there are fewer things
     that can be done wrong when implementing it. Also, ChaCha might be faster on certain hardware that does not provide AES hardware-acceleration (which most common chipsets, even embedded ones, provide).
 
+--8<-- "includes/disclaimer.md"
+
 On this page you will learn:
 
 * What is AES, and features does it provide?
