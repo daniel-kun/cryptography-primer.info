@@ -94,10 +94,29 @@ There are modes that add authentication to the encryption, and there are modes t
 
 |Mode of Operation|Full Name|Description|
 |------|---------|-----------|
-|GCM|Galois/Counter Mode|<div class="admonition success"><p class="admonition-title">This mode is recommended</p><p>The GCM mode uses a random initialization vector (IV) for better security. This means that the same encrypted plaintext does never result in the same ciphertext. The recommended length of the initialization vector is 96 Bit[^13] (12 Bytes).</p></div>|
+|GCM|Galois/Counter Mode|<div class="admonition success"><p class="admonition-title">This mode is recommended</p><p>The GCM mode uses a random initialization vector (IV) for better security. This means that the same encrypted plaintext does never result in the same ciphertext. See [implementation notes for GCM](#implementation-notes-for-gcm).</p></div>|
 |CCM|Counter with CBC-MAC|<div class="admonition info"><p class="admonition-title">Considered secure</p><p>This mode is considered secure and you can safely use it. It is somewhat slower than GCM, though.</p></div>|
 |EAX|<i>unknown</i>|<div class="admonition info"><p class="admonition-title">Not widely used</p><p>This mode is not widely used and hence not widely studied, so it is unsure how secure it is. While it is rather easy to implement, it is also slower than other modes.</p></div>|
 |OCB|Offset Codebook Mode|<div class="admonition info"><p class="admonition-title">This mode is patented</p><p>The OCB mode is very, very fast and considered secure. However, it is patented in the U.S. It is free to use in open source software. If you want to use it in a commercial product, you would need to require a license[^7] or permission to use</a>.</p></div>|
+
+### Implementation notes for GCM
+
+GCM is by far the recommended mode of operation for AES, because:
+
+- It uses a nonce, which strengthens confidentiallity, because the same plaintext will not be encrypted to the same ciphertext.
+- It provides AEAD, which prevents CCA.
+- It is well supported. For example, it is used in the Web Crypto API[^16] and is mandatory in TLS 1.3[^17].
+- It is fast (enough), even for high throughput demands.
+
+However, it comes with one major caveat for implementers[^18]. It supports a nonce of 96 Bits (12 Bytes), which is, depending on the field of application, not enough to use a random value and feel safe enough that it will be unique. After 281,474,976,710,656 messages, you have a 50% chance of re-using a nonce. In practical terms, cryptographers recommend not more than 4,294,967,296 (4 billion) messages with the same key and a random nonce. The fatal thing about this is that a nonce-reuse makes it relatively easy to recover the key and break the security completely (for future __and__ potentially previous messages for this key).
+
+So, if your field of application only encrypts a few thousands or hundred thousands of messages per key, and has a good CSPRNG, you should not face a problem here. For example, when used with TLS, which creates a new Private Key for each session, this is more than unlikely to occur. However, for e.g. password-based schemes, the same key will be used permanently, or at least for a very long time, which makes this more likely.
+
+To prevent this problem that applies to usage of AES-GCM with long-term keys, it is recommended to either
+
+- Implement a key rotation mechanism, if feasible. This minimizes other attack vectors, too, and might prevent the impact of a stolen or broken key.
+- Implement a persistent storage and use a counter per Private Key as the nonce.
+- Use AES-GCM-SIV[^19] instead, which uses larger nonces that are considered secure when generated at random.
 
 ## Modes without Authentication
 
@@ -332,5 +351,9 @@ Recommendations and Key Lengths](https://www.bsi.bund.de/SharedDocs/Downloads/EN
 [^13]: [Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode (GCM) and GMAC](https://csrc.nist.gov/publications/detail/sp/800-38d/final) on csrc.nist.gov
 [^14]: [Hardware Security Module](https://en.wikipedia.org/wiki/Hardware_security_module) on Wikipedia
 [^15]: [Cryptographically-secure pseudorandom number generator](https://en.wikipedia.org/wiki/Cryptographically-secure_pseudorandom_number_generator) on Wikipedia
+[^16]: [Web Crypto API's "SubtleCrypto.encrypt()"](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt) at MDN on developer.mozilla.org
+[^17]: [RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3](https://datatracker.ietf.org/doc/html/rfc8446#section-9.1) on ietf.org
+[^18]: [Why AES-GCM Sucks](https://soatok.blog/2020/05/13/why-aes-gcm-sucks/) on soatok.blog
+[^19]: [RFC 8452: AES-GCM-SIV: Nonce Misuse-Resistant Authenticated Encryption](https://datatracker.ietf.org/doc/html/rfc8452) on ietf.org
 
 --8<-- "includes/abbrevations.md"
