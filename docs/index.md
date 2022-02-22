@@ -62,13 +62,17 @@ hide:
     The following topics are planned to be added in the future:
 
     - Encryption algorithms:
-        - ECIES
         - RSA
         - Practical attacks on encryption algorithms and how to prevent them
     - Key derivation:
         - Overview and comparison
         - Password-based key derivation
         - Key derivation for other scenarios
+    - Risk analysis
+        - What kinds of risks to consider?
+        - Attack scenarios and countermeasures
+    - Off-the-shelve Cryptographic Solutions
+        - Which ready-to-use solutions exist for which use-cases?
     - Hashing functions:
         - SHA2 family
         - SHA3 familiy

@@ -9,6 +9,8 @@ hide:
 
     TODO: Parameters recommendations
 
+--8<-- "includes/disclaimer.md"
+
 On this page you will learn:
 
 * What is ECIES, and features does it provide?
