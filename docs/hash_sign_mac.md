@@ -17,10 +17,10 @@ Here is a table showing the differences of the possibilities for each primitive:
 
 |Feature|Hash|Message Authentication Code (MAC)|Digital Signature|
 |-------|:--:|:---------------:|:-:|
-|Validate that data has not been tampered with or has been corrupted ("Integrity")|:fontawesome-solid-check-circle:|:fontawesome-solid-check-circle:|:fontawesome-solid-check-circle:|
-|Validate the sender of a message by using the Private Key ("Authentication")|:fontawesome-solid-times:|:fontawesome-solid-check-circle:|:fontawesome-solid-check-circle:|
-|Validate the sender of a message by using the Public Key ("Authentication")|:fontawesome-solid-times:|:fontawesome-solid-times:|:fontawesome-solid-check-circle:|
-|Prove that the sender has written and published a message ("Non-Repudiation")|:fontawesome-solid-times:|:fontawesome-solid-times:|:fontawesome-solid-check-circle:|
+|Validate that data has not been tampered with or has been corrupted ("Integrity")|✅|✅|✅|
+|Validate the sender of a message by using the Private Key ("Authentication")|❌|✅|✅|
+|Validate the sender of a message by using the Public Key ("Authentication")|❌|❌|✅|
+|Prove that the sender has written and published a message ("Non-Repudiation")|❌|❌|✅|
 
 ## What are use-cases for hashes?
 
