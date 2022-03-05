@@ -29,7 +29,7 @@ Very often, RSA is used for digital signatures. The most widespread use is for T
 
 RSA can also be used to encrypt data using Public Key encryption - also called Asymmetric Encryption - mechanisms. In contrast to Private Key encryption, where both parties need to know a shared Private Key, in Public Key encryption it is possible to freely share your Public Key and let senders encrypt data using that Public Key for the receiver that knows the Private Key, and only the receiver can decrypt the data with the help of the Private Key.
 
-### Plain RSA encryption
+### Plain RSA encryption (uncommon)
 
 It is possible to encrypt data for a receiver using only RSA and the receiver's Public Key.
 
@@ -51,15 +51,57 @@ In this scheme, the slower RSA encryption only needs to take place on a relative
 
 ## RSA key generation
 
-TODO
+!!! hint "Key Sizes"
+    See [Security Level](#security-level) for recommendations on key size.
+
+RSA key generation is, in contrast to Symmetric Encryption key generation, a slow process. It works by finding very large prime numbers, which is compute intensive and requires enough entropy and a CSPRNG to seed the start of finding a prime.
+
+RSA keys can - and should - be password protected. There are standardized formats for password protection of RSA keys, so usually you just provide a password when saving or loading a private key and it will be interoperable between libraries and programs.
+
+<ul class="recommendations">
+    <li>Use a renown program or library to create RSA keys that makes sure that the process is properly random-seeded.</li>
+    <li>Store your RSA keys password-protected.</li>
+    <li>Use a recommended <a href="#security-level">key size</a> - at least 2048 bits.</li>
+</ul>
 
 ## RSA paddings
 
-TODO
+RSA requires padding when encrypting data that is not of exact the same size as the used RSA Private Key - so basically almost always.
+
+Here's a list of available padding modes:
+
+|Padding Mode|Full Name|Recommendation|
+|------------|---------|--------------|
+|OAEP|Optimal Asymmetric Encryption Padding|{{ recommendation("success", "Recommended", "This is the most secure padding more for RSA and is highly recommended.") }}|
+|PKCS1 v1.5|Public Key Cryptography Standards 1, Version 1.5|{{ recommendation("failure", "Not recommended", "This padding has known security weaknesses and is not recommended in new systems. However, it can be required to use this mode for compatibility with legacy systems.") }}|
+|PSS|Probabilistic Signature Scheme|{{ recommendation("info", "Secure, but can not be used for encryption", "This padding can only be used when creating digital signatures with RSA and can not be used for RSA encryption.") }}|
 
 ## Security Recommendations
 
-TODO
+<table>
+    <thead>
+        <tr>
+            <th>Recommended</th>
+            <th>Discouraged</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr>
+<td>
+<ul class="recommendations">
+    <li>Use at least 2048 Bit key sizes. For keys that are meant to be secure for longer than 2 years, use 4096 Bits or more.</li>
+    <li>TODO.</li>
+</ul>
+</td>
+<td>
+<ul class="discouragements">
+    <li>Don't use key sizes smaller than 2048 Bits.</li>
+    <li>TODO.</li>
+</ul>
+</td>
+      </tr>
+    </tbody>
+</table>
 
 ## Code Samples
 
@@ -84,7 +126,6 @@ For reference, the following security levels are to be expected for huge, usuall
 |------------|--------------|
 |7680|192|
 |15360|256|
-
 
 ## Alternatives
 
