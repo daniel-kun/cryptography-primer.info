@@ -1,0 +1,652 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+      <link rel="icon" href="../images/favicon.svg">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>Encryption - Cryptography Primer</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+  
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--recommendation:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>');}</style>
+
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#encryption" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Cryptography Primer" class="md-header__button md-logo" aria-label="Cryptography Primer" data-md-component="logo">
+      
+  <img src="../images/favicon.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Cryptography Primer
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Encryption
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href=".." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  <li class="md-tabs__item">
+    <a href="./" class="md-tabs__link md-tabs__link--active">
+      Encryption
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Cryptography Primer" class="md-nav__button md-logo" aria-label="Cryptography Primer" data-md-component="logo">
+      
+  <img src="../images/favicon.svg" alt="logo">
+
+    </a>
+    Cryptography Primer
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Encryption
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Encryption
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview-and-comparison" class="md-nav__link">
+    Overview and Comparison
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-encryption" class="md-nav__link">
+    What is Encryption?
+  </a>
+  
+    <nav class="md-nav" aria-label="What is Encryption?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-symmetric-encryption" class="md-nav__link">
+    What is Symmetric Encryption?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-asymmetric-encryption" class="md-nav__link">
+    What is Asymmetric Encryption?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-authenticated-encryption-ae" class="md-nav__link">
+    What is Authenticated Encryption (AE)?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-authenticated-encryption-with-associated-data-aead" class="md-nav__link">
+    What is Authenticated Encryption with Associated Data (AEAD)?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview-and-comparison" class="md-nav__link">
+    Overview and Comparison
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-encryption" class="md-nav__link">
+    What is Encryption?
+  </a>
+  
+    <nav class="md-nav" aria-label="What is Encryption?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-symmetric-encryption" class="md-nav__link">
+    What is Symmetric Encryption?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-asymmetric-encryption" class="md-nav__link">
+    What is Asymmetric Encryption?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-authenticated-encryption-ae" class="md-nav__link">
+    What is Authenticated Encryption (AE)?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-authenticated-encryption-with-associated-data-aead" class="md-nav__link">
+    What is Authenticated Encryption with Associated Data (AEAD)?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="encryption">Encryption</h1>
+<h2 id="overview-and-comparison">Overview and Comparison</h2>
+<p>On this page, you will learn what...</p>
+<ul>
+<li><a href="#symmetric"><strong><abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption</strong></a> (also known as <strong>Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> Encryption</strong>),</li>
+<li><a href="#asymmetric"><strong><abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> Encryption</strong></a> (also known as <strong>Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> Encryption</strong>),</li>
+<li><a href="#ae"><strong>Authenticated Encryption</strong></a> (<abbr title="Authenticated Encryption. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AE cipher is guaranteed to be genuine. AE is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. For example, AES is an AE cipher if you use it with the GCM mode.">AE</abbr>)</li>
+<li><a href="#aead"><strong><abbr title="&quot;AEAD&quot; for short. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AEAD cipher is guaranteed to be genuine. AEAD is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. For example, AES is an AEAD cipher if you use it with the GCM mode.">Authenticated Encryption with Associated Data</abbr></strong></a> (<abbr title="Authenticated Encryption with Associated Data. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AEAD cipher is guaranteed to be genuine. AEAD is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. AEAD also allows sending plaintext &quot;associated data&quot; along the ciphertext that can be used by the recipient for additional operations - e.g. to look up the sender's secret key in a database based on an identifier sent with the associated data. For example, AES is an AEAD cipher if you use it with the GCM mode.">AEAD</abbr>)</li>
+</ul>
+<p>... are and where to learn more about the different algorithms that implement these.</p>
+<div class="admonition example">
+<p class="admonition-title">Overview of encryption algorithms</p>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th><abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> Sizes</th>
+<th>Type</th>
+<th align="center">Authentication?<br/>(<abbr title="Authenticated Encryption. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AE cipher is guaranteed to be genuine. AE is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. For example, AES is an AE cipher if you use it with the GCM mode.">AE</abbr> or <abbr title="Authenticated Encryption with Associated Data. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AEAD cipher is guaranteed to be genuine. AEAD is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. AEAD also allows sending plaintext &quot;associated data&quot; along the ciphertext that can be used by the recipient for additional operations - e.g. to look up the sender's secret key in a database based on an identifier sent with the associated data. For example, AES is an AEAD cipher if you use it with the GCM mode.">AEAD</abbr>)</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/algorithms/aes"><abbr title="Advanced Encryption Standard. A very secure block-cipher that can provide authenticated encryption when combined with the GCM mode of operation.">AES</abbr></a></td>
+<td>128, 192 or 256 Bits</td>
+<td><p><abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr></p>128 Bit <abbr title="A block cipher is an encryption algorithm that can encrypt exactly one size of data, e.g. 128 Bits. Block ciphers can be used to encrypt arbitrary length of data when they are combined with a &quot;mode of operation&quot;. In contrast, Stream Ciphers can directly encrypt arbitrary length of data, even in transit, but are less secure than Block Ciphers.">Block Cipher</abbr></td>
+<td align="center"><p>✅</p>via GCM mode</td>
+<td><div class="admonition success"><p class="admonition-title">Recommended</p><p>This algorithm is considered very secure and widely studied and deployed. GCM or CBC modes are recommended.</p></td>
+</tr>
+<tr>
+<td><a href="/algorithms/chacha/"><abbr title="A very secure stream-cipher that can provide authenticated encryption when used as the ChaCha20-Poly1305 or XChaCha20-Poly1305 ciphers.">ChaCha</abbr></a></td>
+<td>256 Bits</td>
+<td><p><abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr></p><abbr title="In contrast to a Block Cipher, Stream Ciphers can encrypt arbitrary lengths of data, even in transit. However, they are less secure than Block Ciphers and Block Ciphers can be used together with &quot;modes of operation&quot; to encrpt arbitrary lengths of data, too.">Stream Cipher</abbr></td>
+<td align="center"><p>✅</p>via Poly1305</td>
+<td><div class="admonition success"><p class="admonition-title">Recommended</p><p>ChaCha20 is considered very secure and is widely studied and deployed. Use of Poly1305 is recommended.</p></td>
+</tr>
+<tr>
+<td>RSA</td>
+<td>&gt;= 1028 Bits</td>
+<td><p><abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr></p><abbr title="A block cipher is an encryption algorithm that can encrypt exactly one size of data, e.g. 128 Bits. Block ciphers can be used to encrypt arbitrary length of data when they are combined with a &quot;mode of operation&quot;. In contrast, Stream Ciphers can directly encrypt arbitrary length of data, even in transit, but are less secure than Block Ciphers.">Block Cipher</abbr></td>
+<td align="center">?</td>
+<td><div class="admonition success"><p class="admonition-title">Recommended</p><p>This algorithm is considered very secure. Usually used with an <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">symmetric</abbr> encryption algorithm, while RSA "only" encrypts the <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">symmetric</abbr> <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr>.</p></div></td>
+</tr>
+<tr>
+<td>ECIES</td>
+<td>256 Bits</td>
+<td><p><abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> (Hybrid)</p><abbr title="A block cipher is an encryption algorithm that can encrypt exactly one size of data, e.g. 128 Bits. Block ciphers can be used to encrypt arbitrary length of data when they are combined with a &quot;mode of operation&quot;. In contrast, Stream Ciphers can directly encrypt arbitrary length of data, even in transit, but are less secure than Block Ciphers.">Block Cipher</abbr> or <abbr title="In contrast to a Block Cipher, Stream Ciphers can encrypt arbitrary lengths of data, even in transit. However, they are less secure than Block Ciphers and Block Ciphers can be used together with &quot;modes of operation&quot; to encrpt arbitrary lengths of data, too.">Stream Cipher</abbr> possible</td>
+<td align="center">?</td>
+<td><div class="admonition success"><p class="admonition-title">Recommended (but can be hard to implement)</p><p>This encryption scheme is considered very secure. It is not a precicse defined algorithm, but instead a <em>framework</em> to implement encryption when knowing the receiver's Elliptic Curve public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr>. It can be used with <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">symmetric</abbr> encryption algorithms (recommended: <abbr title="Advanced Encryption Standard. A very secure block-cipher that can provide authenticated encryption when combined with the GCM mode of operation.">AES</abbr> or ChaCha20).</p></div></td>
+</tr>
+<tr>
+<td>Camellia</td>
+<td>128, 192 or 256 Bits</td>
+<td><p><abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr></p><abbr title="A block cipher is an encryption algorithm that can encrypt exactly one size of data, e.g. 128 Bits. Block ciphers can be used to encrypt arbitrary length of data when they are combined with a &quot;mode of operation&quot;. In contrast, Stream Ciphers can directly encrypt arbitrary length of data, even in transit, but are less secure than Block Ciphers.">Block Cipher</abbr></td>
+<td align="center">❌</td>
+<td><div class="admonition info"><p class="admonition-title">Considered secure</p><p>This algorithm is considered secure, but is not as widely studied or deployed as <abbr title="Advanced Encryption Standard. A very secure block-cipher that can provide authenticated encryption when combined with the GCM mode of operation.">AES</abbr> or ChaCha20</td>
+</tr>
+<tr>
+<td>3DES</td>
+<td>112 or 168 Bits</td>
+<td><p><abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr></p>64 Bit <abbr title="A block cipher is an encryption algorithm that can encrypt exactly one size of data, e.g. 128 Bits. Block ciphers can be used to encrypt arbitrary length of data when they are combined with a &quot;mode of operation&quot;. In contrast, Stream Ciphers can directly encrypt arbitrary length of data, even in transit, but are less secure than Block Ciphers.">Block Cipher</abbr></td>
+<td align="center">❌</td>
+<td><div class="admonition info"><p class="admonition-title">Less secure than <abbr title="Advanced Encryption Standard. A very secure block-cipher that can provide authenticated encryption when combined with the GCM mode of operation.">AES</abbr> and ChaCha20</p><p>This algorithm is not inherently insecure, but it is less secure than <abbr title="Advanced Encryption Standard. A very secure block-cipher that can provide authenticated encryption when combined with the GCM mode of operation.">AES</abbr> or ChaCha20, and computationally more expensive.</p></div></td>
+</tr>
+<tr>
+<td>DES</td>
+<td>56 Bits</td>
+<td><p><abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr></p>64 Bit <abbr title="A block cipher is an encryption algorithm that can encrypt exactly one size of data, e.g. 128 Bits. Block ciphers can be used to encrypt arbitrary length of data when they are combined with a &quot;mode of operation&quot;. In contrast, Stream Ciphers can directly encrypt arbitrary length of data, even in transit, but are less secure than Block Ciphers.">Block Cipher</abbr></td>
+<td align="center">❌</td>
+<td><div class="admonition failure"><p class="admonition-title">Not recommended</p><p>This algorithm is no longer considered secure</p></div></td>
+</tr>
+<tr>
+<td>Blowfish</td>
+<td>32-448 Bits</td>
+<td><abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> 64 Bit <abbr title="A block cipher is an encryption algorithm that can encrypt exactly one size of data, e.g. 128 Bits. Block ciphers can be used to encrypt arbitrary length of data when they are combined with a &quot;mode of operation&quot;. In contrast, Stream Ciphers can directly encrypt arbitrary length of data, even in transit, but are less secure than Block Ciphers.">Block Cipher</abbr></td>
+<td align="center">❌</td>
+<td><div class="admonition failure"><p class="admonition-title">Not recommended</p><p>This algorithm is no longer considered secure</p></div></td>
+</tr>
+<tr>
+<td><p>ARC4</p>(aka "RC4")</td>
+<td>40-2048 Bits</td>
+<td><abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> <abbr title="In contrast to a Block Cipher, Stream Ciphers can encrypt arbitrary lengths of data, even in transit. However, they are less secure than Block Ciphers and Block Ciphers can be used together with &quot;modes of operation&quot; to encrpt arbitrary lengths of data, too.">Stream Cipher</abbr></td>
+<td align="center">❌</td>
+<td><div class="admonition failure"><p class="admonition-title">Not recommended</p><p>This algorithm is no longer considered secure</p></div></td>
+</tr>
+<tr>
+<td>IDEA</td>
+<td>128 Bits</td>
+<td><abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> 64 Bit <abbr title="A block cipher is an encryption algorithm that can encrypt exactly one size of data, e.g. 128 Bits. Block ciphers can be used to encrypt arbitrary length of data when they are combined with a &quot;mode of operation&quot;. In contrast, Stream Ciphers can directly encrypt arbitrary length of data, even in transit, but are less secure than Block Ciphers.">Block Cipher</abbr></td>
+<td align="center">❌</td>
+<td><div class="admonition failure"><p class="admonition-title">Not recommended</p><p>This algorithm is no longer considered secure</p></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="what-is-encryption">What is Encryption?</h2>
+<p>With "encryption" we mean a way to alter a given "<abbr title="In cryptography, the &quot;plaintext&quot; is the unencrypted data. This does not have to be actual text, it can be arbitrary bytes in non-readable formats such as MP3, PNG or similar. When plaintext is being encrypted, the encrypted result is called &quot;ciphertext&quot;.">plaintext</abbr>" (although this often is not only text, but can be arbitrary data, such as files or a byte stream) to make it incomprehensible without knowing some kind of "secret". Encryption reaches one of the fundamental goals of cryptography: <strong>Confidentiality</strong>.</p>
+<p>Modern encryption schemes - and only those are recommended on this site - also provide <strong>Authenticity</strong>, which guarantees that the <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> and therefore the <abbr title="In cryptography, the &quot;plaintext&quot; is the unencrypted data. This does not have to be actual text, it can be arbitrary bytes in non-readable formats such as MP3, PNG or similar. When plaintext is being encrypted, the encrypted result is called &quot;ciphertext&quot;.">plaintext</abbr> have not been altered without knowing the secret <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr>. This is a very important attribute of an encryption scheme, because modifying the <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> can be a powerful attack vector.</p>
+<p>There are two fundamentally different approaches to encryption. One is called "<abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption" (also known as Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> Encryption) and the other is called "<abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> Encryption" (also known as Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> Encryption).</p>
+<h3 id="what-is-symmetric-encryption"><a name="symmetric"></a>What is <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption?</h3>
+<p>(Also known as Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> Encryption)</p>
+<p>In <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption, the "secret" that is used to make the "<abbr title="In cryptography, the &quot;plaintext&quot; is the unencrypted data. This does not have to be actual text, it can be arbitrary bytes in non-readable formats such as MP3, PNG or similar. When plaintext is being encrypted, the encrypted result is called &quot;ciphertext&quot;.">plaintext</abbr>" incomprehensible (this incomprehensible form is called "<abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr>") is the same as the secret that is used to decrypt the <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> back into <abbr title="In cryptography, the &quot;plaintext&quot; is the unencrypted data. This does not have to be actual text, it can be arbitrary bytes in non-readable formats such as MP3, PNG or similar. When plaintext is being encrypted, the encrypted result is called &quot;ciphertext&quot;.">plaintext</abbr>. This means that the sender and the recipient of the <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> need to know exactly the same secret. This secret is called the "Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr>". It is "private", because it must only be known to the peers that are allowed to know the <abbr title="In cryptography, the &quot;plaintext&quot; is the unencrypted data. This does not have to be actual text, it can be arbitrary bytes in non-readable formats such as MP3, PNG or similar. When plaintext is being encrypted, the encrypted result is called &quot;ciphertext&quot;.">plaintext</abbr>.</p>
+<p>The advantage of <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">symmetric</abbr> encryption is it's speed, because it only requires relatively easy calculations.</p>
+<p>The biggest downside of <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">symmetric</abbr> encryption is that the private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr> needs to be shared between the sender and the recipient. This yields the problem that somehow this secret private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr> must be exchanged before the ciperhtext can be decrypted. This in itself can be a problem, especially when communication takes place over a public medium such as the internet or via radio frequencies.</p>
+<p>This narrows the use case of <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption to situations where this secret can be securely shared between the sender and the receipient. These are some common ways to exchange the secret <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr>:</p>
+<ul>
+<li>Pre-sharing the <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr> over a secured medium - e.g. separately writing the <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr> to the system that encrypts, and the system that decrypts the data</li>
+<li><abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> exchange algorithms such as Diffie-Hellman (<abbr title="Diffie-Hellman is a key exchange algorithm that can be used by two parties to agree on a shared secret key over an unsecure medium. With the help of some mathematical tricks, the data that is transferred via the unsecure medium will not allow an attacker (e.g. Man-in-the-Middle) to also learn the secret key.">DH</abbr>) and Elliptic Curve Diffie-Hellman (<abbr title="Elliptic Curve Diffie-Hellman is a key exchange algorithm based on the Diffie-Hellman algorithm, but using Elliptic Curve mathematics instead. The parties securely agree upon a secret Elliptic Curve private key over an unsecure medium.">ECDH</abbr>)</li>
+<li>Encrypting the secret <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr> alongside the <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> using an <abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">asymmetric</abbr> encryption scheme</li>
+</ul>
+<p>Popular <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption algorithms are <abbr title="Advanced Encryption Standard. A very secure block-cipher that can provide authenticated encryption when combined with the GCM mode of operation.">AES</abbr>, ChaCha20, 3DES and DES. While <abbr title="Advanced Encryption Standard. A very secure block-cipher that can provide authenticated encryption when combined with the GCM mode of operation.">AES</abbr> and ChaCha20 are state-of-the-art secure, you should not use DES or 3DES anymore, because they have been provem to be breakable.</p>
+<h3 id="what-is-asymmetric-encryption"><a name="asymmetric"></a>What is <abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> Encryption?</h3>
+<p>(Also known as Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> Encryption)</p>
+<p><abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> Encryption does not pose the problem that a secret must be shared between the sender and the receipient, because encryption takes place with a Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> and decryption can be done with a Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr>.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. The Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> - as the name suggests - can be shared freely and must not be transmitted securely. You can post it on the internet and it will not be a problem, because you can not decrypt <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> with the Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> that was encrypted using the Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr>. Hence, when a sender wants to send a message securely to a receipient, it must know the receipient's Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr>, can encrypt a message using the Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr>, and the receipient c
+an decrypt it using it's Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr>.</p>
+<p>So the advantage of <abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> Encryption is that it is not required for a secret to be shared between the sender and the receipient, and hence no secure channel must be established before an encrypted message can be exchanged.</p>
+<p>But the disadvantage of <abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">asymmetric</abbr> encryption is that it is compute intensive, and hence can not be used where scale or speed is of importance.</p>
+<p>To mitigate this main disadvantage, <abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> Encryption is usually combined with <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption in a way that the shared secret (Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr>) for the <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption will be encrypted using <abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> Encryption and the actual message is then encrypted using the shared secret and a <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption algorithm. This way, only a tiny bit of the transported data - the shared secret (Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> of the <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption) - must be encrypted using the compute-expensive <abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> Encryption algorithm, and the main content of the transported data can be encrypted using the fast <abbr title="Symmetric cryptographic algorithms are mainly used for data encryption. You encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a shared &quot;private key&quot;. The disadvantage of this is that the &quot;private key&quot; has to be known by the sender and the receiver and therefore has to be transmitted over a separate, secure channel. There are also asymmetric cryptographic algorithms that allow encryption with a &quot;public key&quot; and digital signatures which do not require the sender/receiver to share the same &quot;private key&quot;.">Symmetric</abbr> Encryption.</p>
+<p>Popular <abbr title="Asymmetric cryptographic algorithms can be used for encryption and digital signatures. You can encrypt a &quot;plaintext&quot; into &quot;ciphertext&quot; using a &quot;public key&quot; - which can usually be known by anyone - and decrypt it using the &quot;private key&quot;. You can also encrypt with the private key and decrypt with the public key. Additionally, you can digitally &quot;sign&quot; a payload using a &quot;private key&quot; and everyone with the corresponding &quot;public key&quot; can verify that the payload was created by the legitimate sender.">Asymmetric</abbr> Encryption algorithms are RSA and Elliptic Curves, but they are seldomely used alone for encryption.</p>
+<h3 id="what-is-authenticated-encryption-ae"><a name="ae"></a>What is Authenticated Encryption (<abbr title="Authenticated Encryption. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AE cipher is guaranteed to be genuine. AE is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. For example, AES is an AE cipher if you use it with the GCM mode.">AE</abbr>)?</h3>
+<p>Encryption does not guarantee that the sender of a <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> knows the Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr>. Of course you need a Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> to construct a plausible <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr>, but you can also modify a <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> - or completely guess a <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> from scratch - without knowing the Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> as an attacker. This is called <abbr title="Chosen Ciphertext Attack. An attack strategy that allows recovery of the secret key if the attacker is allowed to provide ciphertexts to be decrypted. CCA-vulnerability is often an attribute of the selected mode of operation of a cipher. Generally, authenticated encryption (such as AES-GCM) protects against CCAs, because the plaintext is being verified during decryption and discarded if it was altered.">CCA</abbr> and usually poses a problem to an encryption system, because it can help to break the security.</p>
+<p>Authenticated Encryption can be used to mitigate this risk, because it can <strong>authenticate</strong> the <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> and/or <abbr title="In cryptography, the &quot;plaintext&quot; is the unencrypted data. This does not have to be actual text, it can be arbitrary bytes in non-readable formats such as MP3, PNG or similar. When plaintext is being encrypted, the encrypted result is called &quot;ciphertext&quot;.">plaintext</abbr> to be assembled by a sender that knows the Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr>. The decryption algorithm will not only decrypt the message, but also check a <abbr title="A Message Authenticate Code can be used to guarantee that a message was sent by the designated sender, which must know some form of secret in addition to the message to construct the MAC. The recipient must know this secret, too, to validate that the MAC is valid for the given message. There are a multitude of different kinds of MAC algorithms and an entire chapter dedicated on this sites to MACs.">MAC</abbr> against the message and only continue decryption if the <abbr title="A Message Authenticate Code can be used to guarantee that a message was sent by the designated sender, which must know some form of secret in addition to the message to construct the MAC. The recipient must know this secret, too, to validate that the MAC is valid for the given message. There are a multitude of different kinds of MAC algorithms and an entire chapter dedicated on this sites to MACs.">MAC</abbr> is constructed correctly.</p>
+<p>It is strongly advised to only use Authenticated Encryption. When Authenticated Encryption is not feasible, it is strongly advised to separately authenticate the <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> using Encrypt-then-<abbr title="A Message Authenticate Code can be used to guarantee that a message was sent by the designated sender, which must know some form of secret in addition to the message to construct the MAC. The recipient must know this secret, too, to validate that the MAC is valid for the given message. There are a multitude of different kinds of MAC algorithms and an entire chapter dedicated on this sites to MACs.">MAC</abbr><sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>.</p>
+<p>A popular and very secure cipher that supports authenticated encryption is ChaCha20-Poly1305.</p>
+<h3 id="what-is-authenticated-encryption-with-associated-data-aead"><a name="aead"></a>What is <abbr title="&quot;AEAD&quot; for short. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AEAD cipher is guaranteed to be genuine. AEAD is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. For example, AES is an AEAD cipher if you use it with the GCM mode.">Authenticated Encryption with Associated Data</abbr> (<abbr title="Authenticated Encryption with Associated Data. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AEAD cipher is guaranteed to be genuine. AEAD is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. AEAD also allows sending plaintext &quot;associated data&quot; along the ciphertext that can be used by the recipient for additional operations - e.g. to look up the sender's secret key in a database based on an identifier sent with the associated data. For example, AES is an AEAD cipher if you use it with the GCM mode.">AEAD</abbr>)?</h3>
+<p><abbr title="Authenticated Encryption with Associated Data. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AEAD cipher is guaranteed to be genuine. AEAD is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. AEAD also allows sending plaintext &quot;associated data&quot; along the ciphertext that can be used by the recipient for additional operations - e.g. to look up the sender's secret key in a database based on an identifier sent with the associated data. For example, AES is an AEAD cipher if you use it with the GCM mode.">AEAD</abbr> is an extension of <abbr title="Authenticated Encryption. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AE cipher is guaranteed to be genuine. AE is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. For example, AES is an AE cipher if you use it with the GCM mode.">AE</abbr> that allows sending <abbr title="In cryptography, the &quot;plaintext&quot; is the unencrypted data. This does not have to be actual text, it can be arbitrary bytes in non-readable formats such as MP3, PNG or similar. When plaintext is being encrypted, the encrypted result is called &quot;ciphertext&quot;.">plaintext</abbr> data alongside the <abbr title="In cryptography, the &quot;ciphertext&quot; is encrypted data. Ciphertext has been created by convertin &quot;plaintext&quot; via an encryption algorithm. Ciphertext can only be converted to &quot;plaintext&quot; if you have the appropriate key.">ciphertext</abbr> that can be read - and later authenticated by the recipient without previously knowing the private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr>.</p>
+<p>One exampe could be that the associated data contains an identifier that the recipient can use to look up the private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">key</abbr> that is required the decrypt and authenticate the message.</p>
+<p>A popular and very secure cipher that supports <abbr title="Authenticated Encryption with Associated Data. This describes ciphers that, in addition to confidentiallity, also provide authenticity of the data. This means that you can be sure that the sender of data encrypted using an AEAD cipher is guaranteed to be genuine. AEAD is often added to &quot;normal&quot; ciphers by using an appropriate mode of operation. AEAD also allows sending plaintext &quot;associated data&quot; along the ciphertext that can be used by the recipient for additional operations - e.g. to look up the sender's secret key in a database based on an identifier sent with the associated data. For example, AES is an AEAD cipher if you use it with the GCM mode.">AEAD</abbr> is <a href="/algorithms/aes/"><abbr title="Advanced Encryption Standard. A very secure block-cipher that can provide authenticated encryption when combined with the GCM mode of operation.">AES</abbr>-GCM</a>.
+...</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Or the other way around: It's also possible to encrypt using the Private <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> and decrypt using the Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> - although this often does not make too much sense, because the Public <abbr title="A &quot;key&quot; in cryptography can mean different things. Usually, it means the &quot;private key&quot; that is used in symmetric and asymmetric algorithms. In symmetric encryption algorithms (also known as private key algorithms), this same key is used to encrypt and decrypt the &quot;ciphertext&quot; back into &quot;plaintext&quot;, which is why it is sometimes only called &quot;key&quot; and not &quot;private key&quot;. In asymmetric algorithms (also known as public key algorithms) it is either used to sign a payload or decrypt ciphertext back into plaintext.">Key</abbr> could be available to anybody&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://tonyarcieri.com/all-the-crypto-code-youve-ever-written-is-probably-broken">All the crypto code you’ve ever written is probably broken</a> as blogged by Tony Arcieri.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2022 Daniel Albuschat <a href="/imprint/">(Imprint)</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/dalbuschat" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/daniel-kun/cryptography-primer.info/" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://www.xing.com/profile/Daniel_Albuschat/cv" target="_blank" rel="noopener" title="www.xing.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M162.7 210c-1.8 3.3-25.2 44.4-70.1 123.5-4.9 8.3-10.8 12.5-17.7 12.5H9.8c-7.7 0-12.1-7.5-8.5-14.4l69-121.3c.2 0 .2-.1 0-.3l-43.9-75.6c-4.3-7.8.3-14.1 8.5-14.1H100c7.3 0 13.3 4.1 18 12.2l44.7 77.5zM382.6 46.1l-144 253v.3L330.2 466c3.9 7.1.2 14.1-8.5 14.1h-65.2c-7.6 0-13.6-4-18-12.2l-92.4-168.5c3.3-5.8 51.5-90.8 144.8-255.2 4.6-8.1 10.4-12.2 17.5-12.2h65.7c8 0 12.3 6.7 8.5 14.1z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+    
+  </body>
+</html>
